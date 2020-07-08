@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site
+      associateSitesURL="https://abelgomez.github.io/cb-feature-modeling/updates/associateSites.xml">
+   <description name="Cardinality-based Feature Modeling Core Tools" url="https://abelgomez.github.io/cb-feature-modeling/updates/">
+      Metamodel and editors to create cardinality-based feature models with attributes. It also supports some additional relationships sucha as Implies, Excludes, and Use.
+   </description>
+   <feature url="features/io.github.abelgomez.features.edit.feature_0.1.0.202007082123.jar" id="io.github.abelgomez.features.edit.feature" version="0.1.0.202007082123">
+      <category name="Feature Modeling"/>
+   </feature>
+   <feature url="features/io.github.abelgomez.features.editors.feature_0.1.0.202007082123.jar" id="io.github.abelgomez.features.editors.feature" version="0.1.0.202007082123">
+      <category name="Feature Modeling"/>
+   </feature>
+   <feature url="features/io.github.abelgomez.features.feature_0.1.0.202007082123.jar" id="io.github.abelgomez.features.feature" version="0.1.0.202007082123">
+      <category name="Feature Modeling"/>
+   </feature>
+   <category-def name="Feature Modeling" label="Feature Modeling">
+      <description>
+         Metamodel and editors to create cardinality-based feature models with attributes. It also supports some additional relationships sucha as Implies, Excludes, and Use.
+      </description>
+   </category-def>
+</site>
