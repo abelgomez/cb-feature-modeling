@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="features" nsURI="http://io.github.abelgomez/features/1.0" nsPrefix="features">
+  <eAnnotations source="Anotaciones">
+    <details key="Mandatory_Optional" value="Las relaciones &quot;Mandatory&quot; y &quot;Optional&quot; no aparecen de forma explícita puesto que una relación estructural será de un tipo u otro dependiendo del valor del atributo &quot;lowerBound&quot;."/>
+    <details key="Structural_vs_Restriction" value="Se diferencia entre relaciones estructurales y restricciones puesto que las relaciones estructurales tienen una semántica adicional.&#xD;&#xA;Por ejemplo, una relación &quot;Mandatory&quot; tiene el mismo siginificado que una &quot;Bicondicional&quot; en cuanto a la existencia de instancias (ambos casos la existencia de la característica de uno de los extremos implica la existencia de la característica al otro lado y viceversa).&#xD;&#xA;No obstante, la relación Mandatory tiene asociado el significado de pertenencia (es decir, A -----Mandatory---> B supone que B es parte de A)."/>
+    <details key="RelatableElement" value="Aunque en principio toda relación es entre dos características se ha añadido la clase &quot;RelatableElement&quot; por simplicidad, pudiendo decir que una relación es entre una característica y otra, o entre un grupo y otra característica.&#xD;&#xA;Si se optara por un diseño donde &quot;Relation&quot; es siempre entre &quot;Features&quot;, manteniendo la clase Group (y su asociación relationships), sería necesaria lógica adicional (OCL) para garantizar que las características que hay en el grupo de una feature realmente relacionan esa feature con otra."/>
+    <details key="Rol_to_diferenciado" value="El rol to se encuentra duplicado en las clases StructuralRelationship y RestrictionRelationship de forma deliberada.&#xD;&#xA;Esto se debe a que se desea restringir en el metamodelo que una Feature sólo pueda tener un padre de tipo estructural, para mantener la estructura en árbol."/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="FeatureModel" eSuperTypes="#//ConstrainableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="features" lowerBound="1"
+        upperBound="-1" eType="#//Feature" containment="true" eOpposite="#//Feature/owner"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rootFeature" lowerBound="1"
+        eType="#//Feature"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relationships" upperBound="-1"
+        eType="#//Relationship" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modelConstraints" upperBound="-1"
+        eType="#//ConstraintsSet" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Feature" eSuperTypes="#//RelatableElement #//ConstrainableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="group" eType="#//Group"
+        containment="true" eOpposite="#//Group/parentFeature"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//Attribute" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" lowerBound="1" eType="#//FeatureModel"
+        eOpposite="#//FeatureModel/features"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//StructuralRelationship"
+        eOpposite="#//StructuralRelationship/to"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Relationship" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Group" eSuperTypes="#//BoundableElement #//RelatableElement #//ConstrainableElement">
+    <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentFeature" lowerBound="1"
+        eType="#//Feature" eOpposite="#//Feature/group"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StructuralRelationship" eSuperTypes="#//Relationship #//BoundableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="from" lowerBound="1" eType="#//RelatableElement"
+        eOpposite="#//RelatableElement/childs"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="to" lowerBound="1" eType="#//Feature"
+        eOpposite="#//Feature/parent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GenericRelationship" abstract="true"
+      eSuperTypes="#//Relationship">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="from" lowerBound="1" eType="#//Feature"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="to" lowerBound="1" eType="#//Feature"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BoundableElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowerBound" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="upperBound" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelatableElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="childs" upperBound="-1"
+        eType="#//StructuralRelationship" eOpposite="#//StructuralRelationship/from"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Biconditional" eSuperTypes="#//RestrictionRelationship"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Implies" eSuperTypes="#//RestrictionRelationship"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Excludes" eSuperTypes="#//RestrictionRelationship"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Uses" eSuperTypes="#//GenericRelationship #//BoundableElement #//ConstrainableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="opposite" eType="#//Uses"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RestrictionRelationship" abstract="true"
+      eSuperTypes="#//GenericRelationship"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstrainableElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraintsSet" eType="#//ConstraintsSet"
+        eOpposite="#//ConstraintsSet/context"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstraintsSet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="context" lowerBound="1"
+        eType="#//ConstrainableElement" eOpposite="#//ConstrainableElement/constraintsSet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" lowerBound="1"
+        upperBound="-1" eType="#//Constraint" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Constraint">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="body" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

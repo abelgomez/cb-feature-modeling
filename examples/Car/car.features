@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features:FeatureModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:features="http://io.github.abelgomez/features/1.0">
+  <features childs="//@relationships.0 //@relationships.1 //@relationships.2 //@relationships.3" name="Car"/>
+  <features constraintsSet="//@modelConstraints.0" name="Wheel" parent="//@relationships.0">
+    <attributes name="radius" type="Integer"/>
+  </features>
+  <features name="Engine" parent="//@relationships.1">
+    <attributes name="power" type="Integer"/>
+  </features>
+  <features name="Transmission" parent="//@relationships.2">
+    <group lowerBound="1" childs="//@relationships.4 //@relationships.5"/>
+  </features>
+  <features name="Manual" parent="//@relationships.4"/>
+  <features name="Automatic" parent="//@relationships.5"/>
+  <features constraintsSet="//@modelConstraints.1" name="TCS" parent="//@relationships.3"/>
+  <relationships xsi:type="features:StructuralRelationship" lowerBound="1" from="//@features.0" to="//@features.1"/>
+  <relationships xsi:type="features:StructuralRelationship" lowerBound="1" from="//@features.0" to="//@features.2"/>
+  <relationships xsi:type="features:StructuralRelationship" lowerBound="1" from="//@features.0" to="//@features.3"/>
+  <relationships xsi:type="features:StructuralRelationship" from="//@features.0" to="//@features.6"/>
+  <relationships xsi:type="features:StructuralRelationship" lowerBound="1" from="//@features.3/@group" to="//@features.4"/>
+  <relationships xsi:type="features:StructuralRelationship" lowerBound="1" from="//@features.3/@group" to="//@features.5"/>
+  <relationships xsi:type="features:Implies" from="//@features.5" to="//@features.6"/>
+  <modelConstraints context="//@features.1">
+    <constraints body="self.radius > 15"/>
+    <constraints body="Wheel.allInstances()->forAll(w1, w2 | w1 &lt;> w2 implies w1.radius = w2.radius)"/>
+  </modelConstraints>
+  <modelConstraints context="//@features.6">
+    <constraints body="TCS.selected() implies Engine.power > 70000"/>
+  </modelConstraints>
+</features:FeatureModel>

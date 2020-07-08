@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ Copyright (c) 2020 Abel Gómez.
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v2.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v20.html
+ 
+ Contributors:
+     Abel Gómez (abel@gomez.llana.me) - initial API and implementation
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.team.core.fileTypes" id="repo-ftype">
+      <?gmfgen generated="true"?>
+      <fileTypes type="text" extension="gfeatures"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.extension_parser" id="resource-factory">
+      <?gmfgen generated="true"?>
+      <parser
+         type="gfeatures"
+         class="org.eclipse.gmf.runtime.emf.core.resources.GMFResourceFactory">
+      </parser>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors" id="gmf-editor">
+      <?gmfgen generated="true"?>
+      <editor
+         id="io.github.abelgomez.features.diagram.part.FeaturesDiagramEditorID"
+         name="%editorName"
+         icon="icons/obj16/FeaturesDiagramFile.png"
+         extensions="gfeatures"
+         default="true"
+         class="io.github.abelgomez.features.diagram.part.FeaturesDiagramEditor"
+         matchingStrategy="io.github.abelgomez.features.diagram.part.FeaturesMatchingStrategy"
+         contributorClass="io.github.abelgomez.features.diagram.part.FeaturesDiagramActionBarContributor">
+      </editor>
+   </extension>
+   
+   <extension point="org.eclipse.ui.contexts" id="ui-context">
+      <?gmfgen generated="true"?>
+      <context
+         description="%context.description"
+         id="io.github.abelgomez.features.diagram.ui.diagramContext"
+         name="%context.name"
+         parentId="org.eclipse.gmf.runtime.diagram.ui.diagramContext">
+      </context>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards" id="creation-wizard">
+      <?gmfgen generated="true"?>
+  	  <wizard
+  	     name="%newWizardName"
+  	     icon="icons/obj16/FeaturesDiagramFile.png"
+  	     category="io.github.abelgomez.features.wizards"
+  	     class="io.github.abelgomez.features.diagram.part.FeaturesCreationWizard"
+  	     id="io.github.abelgomez.features.diagram.part.FeaturesCreationWizardID">
+  	  	 <description>%newWizardDesc</description>  
+      </wizard>
+     <category
+           id="io.github.abelgomez.features.wizards"
+           name="Feature Modeling">
+     </category>
+   </extension>
+
+   <extension point="org.eclipse.ui.popupMenus" id="init-diagram-action">
+      <?gmfgen generated="true"?>
+      <objectContribution
+            id="io.github.abelgomez.features.diagram.InitDiagram"
+            nameFilter="*.features"
+            objectClass="org.eclipse.core.resources.IFile">
+         <action
+               label="%initDiagramActionLabel"
+               class="io.github.abelgomez.features.diagram.part.FeaturesInitDiagramFileAction"
+               menubarPath="additions"
+               enablesFor="1"
+               id="io.github.abelgomez.features.diagram.InitDiagramAction">
+         </action>
+      </objectContribution>
+   </extension>
+	
+   <extension point="org.eclipse.gmf.runtime.common.ui.services.action.globalActionHandlerProviders" id="global-actions">
+      <?gmfgen generated="true"?>
+      <GlobalActionHandlerProvider
+         class="org.eclipse.gmf.runtime.diagram.ui.providers.DiagramGlobalActionHandlerProvider"
+         id="FeaturesPresentation">
+         <Priority name="Lowest"/>
+         <ViewId id="io.github.abelgomez.features.diagram.part.FeaturesDiagramEditorID">
+            <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart">
+               <GlobalActionId actionId="delete"/>
+            </ElementType>
+            <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart">
+               <GlobalActionId actionId="save"/>
+            </ElementType>
+            <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart">
+               <GlobalActionId actionId="save">
+               </GlobalActionId>
+            </ElementType>        
+         </ViewId>
+      </GlobalActionHandlerProvider>
+      <GlobalActionHandlerProvider
+         class="org.eclipse.gmf.runtime.diagram.ui.providers.ide.providers.DiagramIDEGlobalActionHandlerProvider"
+         id="FeaturesPresentationIDE">
+         <Priority name="Lowest"/>
+         <ViewId id="io.github.abelgomez.features.diagram.part.FeaturesDiagramEditorID">
+            <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart">
+               <GlobalActionId actionId="bookmark"/>
+            </ElementType>
+         </ViewId>
+      </GlobalActionHandlerProvider>
+      <GlobalActionHandlerProvider
+            class="org.eclipse.gmf.runtime.diagram.ui.render.providers.DiagramUIRenderGlobalActionHandlerProvider"
+            id="FeaturesRender">
+         <Priority name="Lowest"/>
+         <ViewId id="io.github.abelgomez.features.diagram.part.FeaturesDiagramEditorID">
+            <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart">
+               <GlobalActionId actionId="cut"/>
+               <GlobalActionId actionId="copy"/>
+               <GlobalActionId actionId="paste"/>
+            </ElementType>
+         </ViewId>
+      </GlobalActionHandlerProvider>
+   </extension>
+
+
+   <extension point="org.eclipse.core.runtime.preferences" id="prefs">
+      <?gmfgen generated="true"?>
+      <initializer class="io.github.abelgomez.features.diagram.preferences.DiagramPreferenceInitializer"/>
+   </extension>
+
+   <extension point="org.eclipse.ui.preferencePages" id="prefpages">
+      <?gmfgen generated="true"?>
+      <page
+            id="io.github.abelgomez.features.diagram.general"
+            name="%prefpage.io.github.abelgomez.features.diagram.general"
+            class="io.github.abelgomez.features.diagram.preferences.DiagramGeneralPreferencePage">
+      </page>
+      <page
+            id="io.github.abelgomez.features.diagram.appearance"
+            name="%prefpage.io.github.abelgomez.features.diagram.appearance"
+            category="io.github.abelgomez.features.diagram.general"
+            class="io.github.abelgomez.features.diagram.preferences.DiagramAppearancePreferencePage">
+      </page>
+      <page
+            id="io.github.abelgomez.features.diagram.connections"
+            name="%prefpage.io.github.abelgomez.features.diagram.connections"
+            category="io.github.abelgomez.features.diagram.general"
+            class="io.github.abelgomez.features.diagram.preferences.DiagramConnectionsPreferencePage">
+      </page>
+      <page
+            id="io.github.abelgomez.features.diagram.printing"
+            name="%prefpage.io.github.abelgomez.features.diagram.printing"
+            category="io.github.abelgomez.features.diagram.general"
+            class="io.github.abelgomez.features.diagram.preferences.DiagramPrintingPreferencePage">
+      </page>
+      <page
+            id="io.github.abelgomez.features.diagram.rulersAndGrid"
+            name="%prefpage.io.github.abelgomez.features.diagram.rulersAndGrid"
+            category="io.github.abelgomez.features.diagram.general"
+            class="io.github.abelgomez.features.diagram.preferences.DiagramRulersAndGridPreferencePage">
+      </page>
+   </extension>
+
+   <extension point="org.eclipse.ui.views.properties.tabbed.propertyContributor" id="prop-contrib">
+      <?gmfgen generated="true"?>
+      <propertyContributor
+            contributorId="io.github.abelgomez.features.diagram"
+            labelProvider="io.github.abelgomez.features.diagram.sheet.FeaturesSheetLabelProvider">
+         <propertyCategory category="domain"/>
+         <propertyCategory category="visual"/>
+         <propertyCategory category="extra"/>
+      </propertyContributor>
+   </extension>
+
+   <extension point="org.eclipse.ui.views.properties.tabbed.propertyTabs" id="proptabs">
+      <?gmfgen generated="true"?>   
+      <propertyTabs contributorId="io.github.abelgomez.features.diagram">
+         <propertyTab
+             category="visual"
+             id="property.tab.AppearancePropertySection"
+             label="%tab.appearance"/>
+          <propertyTab
+             category="visual"
+             id="property.tab.DiagramPropertySection"
+             label="%tab.diagram"/>
+          <propertyTab
+             category="domain"
+             id="property.tab.domain"
+             label="%tab.domain"/>
+      </propertyTabs>
+   </extension>
+
+   <extension point="org.eclipse.ui.views.properties.tabbed.propertySections" id="propsections">
+      <?gmfgen generated="true"?>   
+      <propertySections contributorId="io.github.abelgomez.features.diagram">
+         <propertySection id="property.section.ConnectorAppearancePropertySection" 
+            filter="org.eclipse.gmf.runtime.diagram.ui.properties.filters.ConnectionEditPartPropertySectionFilter" 
+            class="org.eclipse.gmf.runtime.diagram.ui.properties.sections.appearance.ConnectionAppearancePropertySection" 
+            tab="property.tab.AppearancePropertySection">
+         </propertySection>
+         <propertySection id="property.section.ShapeColorAndFontPropertySection" 
+            filter="org.eclipse.gmf.runtime.diagram.ui.properties.filters.ShapeEditPartPropertySectionFilter" 
+            class="org.eclipse.gmf.runtime.diagram.ui.properties.sections.appearance.ShapeColorsAndFontsPropertySection" 
+            tab="property.tab.AppearancePropertySection">
+         </propertySection> 
+         <propertySection id="property.section.DiagramColorsAndFontsPropertySection" 
+            filter="org.eclipse.gmf.runtime.diagram.ui.properties.filters.DiagramEditPartPropertySectionFilter" 
+            class="org.eclipse.gmf.runtime.diagram.ui.properties.sections.appearance.DiagramColorsAndFontsPropertySection" 
+            tab="property.tab.AppearancePropertySection">
+         </propertySection>     
+         <propertySection id="property.section.RulerGridPropertySection" 
+            filter="org.eclipse.gmf.runtime.diagram.ui.properties.filters.DiagramEditPartPropertySectionFilter" 
+            class="org.eclipse.gmf.runtime.diagram.ui.properties.sections.grid.RulerGridPropertySection" 
+            tab="property.tab.DiagramPropertySection">
+         </propertySection>     
+         <propertySection
+            id="property.section.domain" 
+            tab="property.tab.domain"
+            class="io.github.abelgomez.features.diagram.sheet.FeaturesPropertySection">
+            <input type="org.eclipse.gmf.runtime.notation.View"/>
+            <input type="org.eclipse.gef.EditPart"/>
+            <input type="io.github.abelgomez.features.diagram.navigator.FeaturesAbstractNavigatorItem"/>
+         </propertySection>
+      </propertySections>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.diagram.core.viewProviders" id="view-provider">
+      <?gmfgen generated="true"?>
+      <viewProvider class="io.github.abelgomez.features.diagram.providers.FeaturesViewProvider">
+         <Priority name="Lowest"/>
+         <context viewClass="org.eclipse.gmf.runtime.notation.Diagram" semanticHints="Features"/>
+         <context viewClass="org.eclipse.gmf.runtime.notation.Node" semanticHints="2003,2004,3005,3006,3007,3008"/>
+         <context viewClass="org.eclipse.gmf.runtime.notation.Edge" semanticHints="4008,4009,4010,4011,4012,4013,4014"/>
+      </viewProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.diagram.ui.editpartProviders" id="ep-provider">
+      <?gmfgen generated="false"?>
+      <editpartProvider class="io.github.abelgomez.features.diagram.providers.CustomFeaturesEditPartProvider">
+         <Priority name="Lowest"/>
+         <object class="org.eclipse.gmf.runtime.notation.Diagram" id="generated-diagram">
+            <method name="getType()" value="Features"/>
+         </object>
+         <object class="org.eclipse.gmf.runtime.notation.Node" id="generated-nodes">
+            <method name="getType()" value="2003,2004,3005,3006,3007,3008"/>
+         </object>
+         <object class="org.eclipse.gmf.runtime.notation.Edge" id="generated-links">
+            <method name="getType()" value="4008,4009,4010,4011,4012,4013,4014"/>
+         </object>
+         <object class="org.eclipse.gmf.runtime.notation.Node" id="generated-labels">
+            <method name="getType()" value="5006,5004,5005"/>
+         </object>
+         <object class="org.eclipse.gmf.runtime.notation.Node" id="generated-compartments">
+            <method name="getType()" value="7003,7004"/>
+         </object>
+         <context views="generated-diagram,generated-nodes,generated-links,generated-labels,generated-compartments"/>
+      </editpartProvider>
+   </extension>
+
+   
+   <extension point="org.eclipse.gmf.runtime.emf.ui.modelingAssistantProviders" id="modelassist-provider">
+      <?gmfgen generated="true"?>
+      <modelingAssistantProvider class="io.github.abelgomez.features.diagram.providers.assistants.FeaturesModelingAssistantProviderOfFeatureModelEditPart">
+         <Priority name="Lowest"/>
+         <object class="io.github.abelgomez.features.diagram.edit.parts.FeatureModelEditPart" id="FeatureModel_1000"/>
+         <context elements="FeatureModel_1000"/>
+      </modelingAssistantProvider>
+            <modelingAssistantProvider class="io.github.abelgomez.features.diagram.providers.assistants.FeaturesModelingAssistantProviderOfFeatureEditPart">
+         <Priority name="Lowest"/>
+         <object class="io.github.abelgomez.features.diagram.edit.parts.FeatureEditPart" id="Feature_2003"/>
+         <context elements="Feature_2003"/>
+      </modelingAssistantProvider>
+            <modelingAssistantProvider class="io.github.abelgomez.features.diagram.providers.assistants.FeaturesModelingAssistantProviderOfConstraintsSetEditPart">
+         <Priority name="Lowest"/>
+         <object class="io.github.abelgomez.features.diagram.edit.parts.ConstraintsSetEditPart" id="ConstraintsSet_2004"/>
+         <context elements="ConstraintsSet_2004"/>
+      </modelingAssistantProvider>
+            <modelingAssistantProvider class="io.github.abelgomez.features.diagram.providers.assistants.FeaturesModelingAssistantProviderOfGroupEditPart">
+         <Priority name="Lowest"/>
+         <object class="io.github.abelgomez.features.diagram.edit.parts.GroupEditPart" id="Group_3005"/>
+         <context elements="Group_3005"/>
+      </modelingAssistantProvider>
+            <modelingAssistantProvider class="io.github.abelgomez.features.diagram.providers.assistants.FeaturesModelingAssistantProviderOfGroup2EditPart">
+         <Priority name="Lowest"/>
+         <object class="io.github.abelgomez.features.diagram.edit.parts.Group2EditPart" id="Group_3006"/>
+         <context elements="Group_3006"/>
+      </modelingAssistantProvider>
+            <modelingAssistantProvider class="io.github.abelgomez.features.diagram.providers.assistants.FeaturesModelingAssistantProviderOfAttributeEditPart">
+         <Priority name="Lowest"/>
+         <object class="io.github.abelgomez.features.diagram.edit.parts.AttributeEditPart" id="Attribute_3007"/>
+         <context elements="Attribute_3007"/>
+      </modelingAssistantProvider>
+            <modelingAssistantProvider class="io.github.abelgomez.features.diagram.providers.assistants.FeaturesModelingAssistantProviderOfConstraintEditPart">
+         <Priority name="Lowest"/>
+         <object class="io.github.abelgomez.features.diagram.edit.parts.ConstraintEditPart" id="Constraint_3008"/>
+         <context elements="Constraint_3008"/>
+      </modelingAssistantProvider>
+      
+   </extension>
+
+
+   <extension point="org.eclipse.gmf.runtime.common.ui.services.iconProviders" id="icon-provider">
+      <?gmfgen generated="true"?>
+      <IconProvider class="io.github.abelgomez.features.diagram.providers.FeaturesIconProvider">
+         <Priority name="Low"/>
+      </IconProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.common.ui.services.parserProviders" id="parser-provider">
+      <?gmfgen generated="true"?>
+      <ParserProvider class="io.github.abelgomez.features.diagram.providers.FeaturesParserProvider">
+         <Priority name="Lowest"/>
+      </ParserProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.emf.type.core.elementTypes" id="element-types">
+      <?gmfgen generated="true"?>
+      <metamodel nsURI="http://io.github.abelgomez/features/1.0">
+         <metamodelType
+               id="io.github.abelgomez.features.diagram.FeatureModel_1000"
+               name="%metatype.name.FeatureModel_1000"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="FeatureModel"
+               edithelper="io.github.abelgomez.features.diagram.edit.helpers.FeatureModelEditHelper">
+            <param name="semanticHint" value="1000"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http://io.github.abelgomez/features/1.0">
+         <metamodelType
+               id="io.github.abelgomez.features.diagram.Feature_2003"
+               name="%metatype.name.Feature_2003"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Feature"
+               edithelper="io.github.abelgomez.features.diagram.edit.helpers.FeatureEditHelper">
+            <param name="semanticHint" value="2003"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http://io.github.abelgomez/features/1.0">
+         <metamodelType
+               id="io.github.abelgomez.features.diagram.ConstraintsSet_2004"
+               name="%metatype.name.ConstraintsSet_2004"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="ConstraintsSet"
+               edithelper="io.github.abelgomez.features.diagram.edit.helpers.ConstraintsSetEditHelper">
+            <param name="semanticHint" value="2004"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http://io.github.abelgomez/features/1.0">
+         <metamodelType
+               id="io.github.abelgomez.features.diagram.Group_3005"
+               name="%metatype.name.Group_3005"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Group"
+               edithelper="io.github.abelgomez.features.diagram.edit.helpers.GroupEditHelper">
+            <param name="semanticHint" value="3005"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http://io.github.abelgomez/features/1.0">
+         <specializationType
+               id="io.github.abelgomez.features.diagram.Group_3006"
+               name="%metatype.name.Group_3006"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="io.github.abelgomez.features.diagram.Group_3005"/>
+            <param name="semanticHint" value="3006"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http://io.github.abelgomez/features/1.0">
+         <metamodelType
+               id="io.github.abelgomez.features.diagram.Attribute_3007"
+               name="%metatype.name.Attribute_3007"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Attribute"
+               edithelper="io.github.abelgomez.features.diagram.edit.helpers.AttributeEditHelper">
+            <param name="semanticHint" value="3007"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http://io.github.abelgomez/features/1.0">
+         <metamodelType
+               id="io.github.abelgomez.features.diagram.Constraint_3008"
+               name="%metatype.name.Constraint_3008"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Constraint"
+               edithelper="io.github.abelgomez.features.diagram.edit.helpers.ConstraintEditHelper">
+            <param name="semanticHint" value="3008"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http://io.github.abelgomez/features/1.0">
+         <metamodelType
+               id="io.github.abelgomez.features.diagram.StructuralRelationship_4008"
+               name="%metatype.name.StructuralRelationship_4008"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="StructuralRelationship"
+               edithelper="io.github.abelgomez.features.diagram.edit.helpers.StructuralRelationshipEditHelper">
+            <param name="semanticHint" value="4008"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http://io.github.abelgomez/features/1.0">
+         <specializationType
+               id="io.github.abelgomez.features.diagram.StructuralRelationship_4009"
+               name="%metatype.name.StructuralRelationship_4009"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="io.github.abelgomez.features.diagram.StructuralRelationship_4008"/>
+            <param name="semanticHint" value="4009"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http://io.github.abelgomez/features/1.0">
+         <metamodelType
+               id="io.github.abelgomez.features.diagram.Implies_4010"
+               name="%metatype.name.Implies_4010"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Implies"
+               edithelper="io.github.abelgomez.features.diagram.edit.helpers.ImpliesEditHelper">
+            <param name="semanticHint" value="4010"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http://io.github.abelgomez/features/1.0">
+         <metamodelType
+               id="io.github.abelgomez.features.diagram.Biconditional_4011"
+               name="%metatype.name.Biconditional_4011"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Biconditional"
+               edithelper="io.github.abelgomez.features.diagram.edit.helpers.BiconditionalEditHelper">
+            <param name="semanticHint" value="4011"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http://io.github.abelgomez/features/1.0">
+         <metamodelType
+               id="io.github.abelgomez.features.diagram.Excludes_4012"
+               name="%metatype.name.Excludes_4012"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Excludes"
+               edithelper="io.github.abelgomez.features.diagram.edit.helpers.ExcludesEditHelper">
+            <param name="semanticHint" value="4012"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http://io.github.abelgomez/features/1.0">
+         <metamodelType
+               id="io.github.abelgomez.features.diagram.Uses_4013"
+               name="%metatype.name.Uses_4013"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Uses"
+               edithelper="io.github.abelgomez.features.diagram.edit.helpers.UsesEditHelper">
+            <param name="semanticHint" value="4013"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http://io.github.abelgomez/features/1.0">
+         <specializationType
+               id="io.github.abelgomez.features.diagram.ConstrainableElementConstraintsSet_4014"
+               name="%metatype.name.ConstrainableElementConstraintsSet_4014"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="org.eclipse.gmf.runtime.emf.type.core.null"/>
+            <param name="semanticHint" value="4014"/>
+         </specializationType>
+      </metamodel>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.emf.type.core.elementTypeBindings" id="element-types-bindings">
+      <?gmfgen generated="true"?>
+      <clientContext id="io.github.abelgomez.features.diagram.TypeContext">
+         <enablement>
+            <test
+               property="org.eclipse.gmf.runtime.emf.core.editingDomain"
+               value="io.github.abelgomez.features.diagram.EditingDomain"/>
+         </enablement>
+      </clientContext> 
+      <binding context="io.github.abelgomez.features.diagram.TypeContext">
+         <elementType ref="io.github.abelgomez.features.diagram.FeatureModel_1000"/>
+         <elementType ref="io.github.abelgomez.features.diagram.Feature_2003"/>
+         <elementType ref="io.github.abelgomez.features.diagram.ConstraintsSet_2004"/>
+         <elementType ref="io.github.abelgomez.features.diagram.Group_3005"/>
+         <elementType ref="io.github.abelgomez.features.diagram.Group_3006"/>
+         <elementType ref="io.github.abelgomez.features.diagram.Attribute_3007"/>
+         <elementType ref="io.github.abelgomez.features.diagram.Constraint_3008"/>
+         <elementType ref="io.github.abelgomez.features.diagram.StructuralRelationship_4008"/>
+         <elementType ref="io.github.abelgomez.features.diagram.StructuralRelationship_4009"/>
+         <elementType ref="io.github.abelgomez.features.diagram.Implies_4010"/>
+         <elementType ref="io.github.abelgomez.features.diagram.Biconditional_4011"/>
+         <elementType ref="io.github.abelgomez.features.diagram.Excludes_4012"/>
+         <elementType ref="io.github.abelgomez.features.diagram.Uses_4013"/>
+         <elementType ref="io.github.abelgomez.features.diagram.ConstrainableElementConstraintsSet_4014"/>
+         <advice ref="org.eclipse.gmf.runtime.diagram.core.advice.notationDepdendents"/>
+      </binding>
+   </extension>
+	   <extension point="org.eclipse.core.expressions.propertyTesters" id="navigator-proptest.isURIEditorInput">
+      <?gmfgen generated="true"?>
+       <propertyTester
+           id="io.github.abelgomez.features.diagram.URIEditorInputPropertyTester"
+           type="org.eclipse.emf.common.ui.URIEditorInput"
+           namespace="io.github.abelgomez.features.diagram"
+           properties="isURIEditorInput"
+           class="io.github.abelgomez.features.diagram.part.FeaturesUriEditorInputTester">
+       </propertyTester>
+   </extension>
+
+	   <extension point="org.eclipse.ui.navigator.viewer" id="navigator-viewbinding">
+      <?gmfgen generated="true"?>
+      <viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+         <includes>
+            <contentExtension pattern="io.github.abelgomez.features.diagram.resourceContent"/>
+			<contentExtension pattern="io.github.abelgomez.features.diagram.domainResourceContent"/>
+            <contentExtension pattern="io.github.abelgomez.features.diagram.navigatorLinkHelper"/>
+         </includes>
+      </viewerContentBinding>
+      <viewerActionBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+         <includes>
+            <actionExtension pattern="io.github.abelgomez.features.diagram.navigatorActionProvider"/>
+         </includes>
+      </viewerActionBinding>
+   </extension>
+
+   <extension point="org.eclipse.ui.navigator.navigatorContent" id="navigator-content">
+      <?gmfgen generated="true"?>
+      <navigatorContent
+            id="io.github.abelgomez.features.diagram.resourceContent" 
+            name="%navigatorContentName" 
+            priority="normal" 
+            contentProvider="io.github.abelgomez.features.diagram.navigator.FeaturesNavigatorContentProvider" 
+            labelProvider="io.github.abelgomez.features.diagram.navigator.FeaturesNavigatorLabelProvider"
+            icon="icons/obj16/FeaturesDiagramFile.png"
+            activeByDefault="true">
+         <triggerPoints>
+            <or>
+	           <and>
+    	          <instanceof value="org.eclipse.core.resources.IFile"/>
+        	      <test property="org.eclipse.core.resources.extension" value="gfeatures"/>
+               </and>
+               <instanceof value="io.github.abelgomez.features.diagram.navigator.FeaturesAbstractNavigatorItem"/>
+            </or>
+         </triggerPoints>
+         <possibleChildren>
+            <or>
+         	   <instanceof value="io.github.abelgomez.features.diagram.navigator.FeaturesAbstractNavigatorItem"/>
+            </or>
+         </possibleChildren>
+         <commonSorter 
+               id="io.github.abelgomez.features.diagram.navigatorSorter" 
+               class="io.github.abelgomez.features.diagram.navigator.FeaturesNavigatorSorter">
+            <parentExpression>
+               <or>
+	              <and>
+    	             <instanceof value="org.eclipse.core.resources.IFile"/>
+        	         <test property="org.eclipse.core.resources.extension" value="gfeatures"/>
+                  </and>
+                  <instanceof value="io.github.abelgomez.features.diagram.navigator.FeaturesAbstractNavigatorItem"/>
+               </or>
+            </parentExpression>
+         </commonSorter>
+      </navigatorContent>
+      <navigatorContent
+            id="io.github.abelgomez.features.diagram.domainResourceContent" 
+            name="%domainNavigatorContentName" 
+            priority="normal" 
+            contentProvider="io.github.abelgomez.features.diagram.navigator.FeaturesDomainNavigatorContentProvider" 
+            labelProvider="io.github.abelgomez.features.diagram.navigator.FeaturesDomainNavigatorLabelProvider"
+            icon="icons/obj16/FeaturesDiagramFile.png"
+            activeByDefault="true">
+         <triggerPoints>
+            <or>
+	           <and>
+    	          <instanceof value="org.eclipse.core.resources.IFile"/>
+        	      <test property="org.eclipse.core.resources.extension" value="features"/>
+               </and>
+               <instanceof value="io.github.abelgomez.features.diagram.navigator.FeaturesDomainNavigatorItem"/>
+            </or>
+         </triggerPoints>
+         <possibleChildren>
+            <instanceof value="io.github.abelgomez.features.diagram.navigator.FeaturesDomainNavigatorItem"/>
+         </possibleChildren>
+      </navigatorContent>
+      <actionProvider
+            id="io.github.abelgomez.features.diagram.navigatorActionProvider"
+            class="io.github.abelgomez.features.diagram.navigator.FeaturesNavigatorActionProvider">
+         <enablement>
+            <or>
+               <instanceof value="io.github.abelgomez.features.diagram.navigator.FeaturesAbstractNavigatorItem"/>
+            </or>
+         </enablement>
+      </actionProvider>
+   </extension>
+   
+	   <extension point="org.eclipse.ui.navigator.linkHelper" id="navigator-linkhelper">
+      <?gmfgen generated="true"?>
+      <linkHelper
+            id="io.github.abelgomez.features.diagram.navigatorLinkHelper"
+            class="io.github.abelgomez.features.diagram.navigator.FeaturesNavigatorLinkHelper">
+         <editorInputEnablement>
+            <and>
+               <instanceof value="org.eclipse.emf.common.ui.URIEditorInput"/>
+               <test property="io.github.abelgomez.features.diagram.isURIEditorInput"/>
+            </and>
+         </editorInputEnablement>
+         <selectionEnablement>
+            <instanceof value="io.github.abelgomez.features.diagram.navigator.FeaturesAbstractNavigatorItem"/>
+         </selectionEnablement>
+      </linkHelper>
+   </extension>
+   <extension point="org.eclipse.ui.commands" id="update-cmd">
+      <?gmfgen generated="true"?>
+      <command
+         categoryId="org.eclipse.ui.category.edit"
+         defaultHandler="io.github.abelgomez.features.diagram.part.FeaturesDiagramUpdateCommand"
+         description="%update.diagram.description"
+         id="io.github.abelgomez.features.diagram.updateDiagram"
+         name="%update.diagram.name"/>
+   </extension>
+   
+   <extension point="org.eclipse.ui.bindings" id="update-cmd-binding">
+      <?gmfgen generated="true"?>
+      <key 
+         commandId="io.github.abelgomez.features.diagram.updateDiagram"
+         contextId="io.github.abelgomez.features.diagram.ui.diagramContext"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         sequence="F5"/>
+   </extension>
+
+   <extension point="org.eclipse.ui.menus" id="context-menus">
+      <?gmfgen generated="true"?>
+      <!-- menuContribution locationURI="menu:org.eclipse.ui.main.menu?after=">
+      </menuContribution>
+      <menuContribution locationURI="toolbar:org.eclipse.ui.main.toolbar?after=">
+      </menuContribution -->
+      <menuContribution locationURI="popup:org.eclipse.gmf.runtime.diagram.ui.DiagramEditorContextMenu">
+         <command commandId="io.github.abelgomez.features.diagram.LoadResourceAction">
+            <visibleWhen>
+               <and>
+                  <with variable="activePartId"><equals value="io.github.abelgomez.features.diagram.part.FeaturesDiagramEditorID"/></with>
+                  <with variable="selection"><iterate ifEmpty="false"> 
+                     <instanceof value="io.github.abelgomez.features.diagram.edit.parts.FeatureModelEditPart"/>
+                  </iterate></with>
+               </and>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+
+   <extension point="org.eclipse.ui.commands" id="menu-commands">
+      <?gmfgen generated="true"?>
+      <category id="io.github.abelgomez.features.diagram.part.FeaturesDiagramEditorID" name="%cmdcategory.name" description="%cmdcategory.desc"/>
+      <command id="io.github.abelgomez.features.diagram.LoadResourceAction"
+         name="Load Resource"
+         categoryId="io.github.abelgomez.features.diagram.part.FeaturesDiagramEditorID"
+         defaultHandler="io.github.abelgomez.features.diagram.part.LoadResourceAction"/>
+   </extension>
+
+   <extension point="org.eclipse.ui.handlers" id="menu-handlers">
+      <?gmfgen generated="true"?>
+   </extension>
+
+   <!-- optionally, specify keybindings -->
+</plugin>

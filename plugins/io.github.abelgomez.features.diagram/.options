@@ -1,0 +1,7 @@
+# Tracing options for the io.github.abelgomez.features.diagram plug-in
+
+# Common issues
+io.github.abelgomez.features.diagram/debug=false
+
+# Visual IDs
+io.github.abelgomez.features.diagram/debug/visualID=false
